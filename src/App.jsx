@@ -1,10 +1,8 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Home } from './_root/pages'
+import { Home, Profile, RootLayout } from './_root'
+import { AuthLayout, SignIn, SignUp } from './_auth'
 import './globals.css'
-import RootLayout from './_root/RootLayout'
-import AuthLayout from './_auth/AuthLayout'
-import { SignIn, SignUp } from './_auth/pages'
 import NotFound from './_root/pages/NotFound/NotFound'
 function App() {
 
@@ -18,9 +16,10 @@ function App() {
 
         <Route element={<RootLayout />} >
           <Route index element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='*' element={<NotFound />} />
         </Route>
 
-        <Route path='*' element={<NotFound />} />
       </Routes>
     </main>
   )

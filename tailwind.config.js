@@ -7,7 +7,11 @@ export default {
   theme: {
     extend: {
       colors:{
-        "grey": "#363838"
+        "grey": "#363838",
+        "secondary": "#7d75ed",
+      },
+      fontFamily:{
+        "pacifico":"Pacifico"
       }
     },
   },
