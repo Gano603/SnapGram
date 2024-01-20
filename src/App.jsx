@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Home, Profile, RootLayout } from './_root'
+import { Explore, Home, Profile, RootLayout } from './_root'
 import { AuthLayout, SignIn, SignUp } from './_auth'
 import './globals.css'
 import NotFound from './_root/pages/NotFound/NotFound'
@@ -17,6 +17,7 @@ function App() {
         <Route element={<RootLayout />} >
           <Route index element={<Home />} />
           <Route path='/profile' element={<Profile />} />
+          <Route path='/explore' element={<Explore />} />
           <Route path='*' element={<NotFound />} />
         </Route>
 

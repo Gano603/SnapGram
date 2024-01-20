@@ -1,5 +1,7 @@
 export { default as Home} from './pages/Home/Home'
+export { default as Explore} from './pages/Explore/Explore'
 export { default as Profile} from './pages/Profile/Profile'
+export { default as Search} from './pages/Main components/Search'
 export { default as Navbar} from './pages/Main components/Navbar'
 export { default as SuggestionFooter} from './pages/Home/components/SuggestionFooter'
 export { default as MainFooter} from './pages/Main components/MainFooter'

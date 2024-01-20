@@ -12,6 +12,9 @@ export default {
       },
       fontFamily:{
         "pacifico":"Pacifico"
+      },
+      gridAutoRows:{
+        "grid-flow-row-reverse": "row-reverse"
       }
     },
   },
