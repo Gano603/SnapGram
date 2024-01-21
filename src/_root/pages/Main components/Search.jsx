@@ -9,15 +9,14 @@ const Search = () => {
     const { isSearchOpen } = useSelector(state => state.states);
 
     return (
-        <AnimatePresence>
+        <>
             {isSearchOpen &&
                 <motion.div
                     variants={divAnim}
                     initial={"initial"}
                     animate={"animate"}
-                    transition={"type"}
                     exit={"exit"}
-                    className='border-r-[1px] border-grey'>
+                    className='border-r-[1px] w-[25rem] absolute h-screen z-10 bg-black border-grey overflow-y-auto'>
                     <div className='px-5'>
                         <h1 className='text-2xl font-semibold my-7 mx-1'>Search</h1>
                         <input className='my-3 px-3 h-9 w-full rounded-md outline-none bg-grey' type="search" placeholder='Search' />
@@ -43,8 +42,7 @@ const Search = () => {
                         <UserCard id={"muhammad.khawar.577"} name={"Muhammad Khawar"} imgUrl={"/assets/images/profile.png"} user={true} search={true} />
                     </div>
                 </motion.div>}
-
-        </AnimatePresence>
+        </>
     )
 }
 

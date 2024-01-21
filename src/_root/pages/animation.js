@@ -1,14 +1,15 @@
 export const divAnim = {
-    "initial":{
-        width: 0
+    "initial": {
+        translateX: -300
     },
-    "animate":{
-        width: "30rem"
+    "animate": {
+        translateX: 0,
+        transition: {
+            ease: 'easeInOut',
+            duration: 0.5
+        }
     },
-    "type":{
-        ease: 'easeInOut'
-    },
-    "exit":{
-        width: 0
+    "exit": {
+        translateX: -300
     }
 }

@@ -1,14 +1,23 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useNavigate } from "react-router-dom"
-import { MainFooter, Navbar, Search } from './index'
-import { setIsSearchOpen } from "../features/StateSlice";
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
+import { MainFooter, Navbar, NotifiactionBar, Search } from './index'
+import { setIsNavbarMinimized, setIsNotificationOpen, setIsSearchOpen } from "../features/StateSlice";
+import { AnimatePresence } from "framer-motion";
+import LeftPanel from "./pages/Chat/components/LeftPanel";
 
 const RootLayout = () => {
 
-  const { isLoggedIn , isSearchOpen} = useSelector(state => state.states);
+  const { isLoggedIn, isSearchOpen, isNotificationOpen } = useSelector(state => state.states);
   const nav = useNavigate();
+  const location = useLocation();
   const disp = useDispatch();
+
+  const stateChange = (search, notification, navbarMinimized) => {
+    disp(setIsSearchOpen(search))
+    disp(setIsNotificationOpen(notification))
+    disp(setIsNavbarMinimized(navbarMinimized))
+  }
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -18,11 +27,17 @@ const RootLayout = () => {
 
   return (
     <div className="flex w-full">
-      <div className={`flex ${isSearchOpen? "w-[30rem]":"w-[24rem]"}`}>
-      <Navbar />
-      <Search />
+      <div className='flex min-w-[30rem]'>
+        <Navbar />
+        <div className="w-full h-screen relative">
+          <AnimatePresence>
+            <Search key={1} />
+            <NotifiactionBar key={2} />
+            <LeftPanel id={"fluffyguy123"} />
+          </AnimatePresence>
+        </div>
       </div>
-      <section onClick={()=> disp(setIsSearchOpen(false))} className="overflow-y-auto scroll-none h-[100vh] w-full">
+      <section onClick={() => location.pathname !== '/inbox' ? stateChange(false, false, false) : ""} className="overflow-y-auto scroll-none h-[100vh] w-full">
         <Outlet />
         <MainFooter />
       </section>

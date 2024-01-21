@@ -2,7 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     isLoggedIn:true,
-    isSearchOpen:false
+    isSearchOpen:false,
+    isNotificationOpen:false,
+    isNavbarMinimize:true,
+    isInitialChatbox:true
 }
 
 const stateSlice = createSlice({
@@ -14,10 +17,19 @@ const stateSlice = createSlice({
         },
         setIsSearchOpen:(state,action) =>{
             state.isSearchOpen = action.payload;
+        },
+        setIsNotificationOpen:(state,action) =>{
+            state.isNotificationOpen = action.payload;
+        },
+        setIsNavbarMinimized:(state,action) =>{
+            state.isNavbarMinimize = action.payload;
+        },
+        setIsInitialChatbox:(state,action) =>{
+            state.isInitialChatbox = action.payload;
         }
     }
 })
 
-export const {setIsLoggedIn,setIsSearchOpen} = stateSlice.actions;
+export const {setIsLoggedIn,setIsSearchOpen,setIsNotificationOpen,setIsNavbarMinimized,setIsInitialChatbox} = stateSlice.actions;
 
 export default stateSlice.reducer
