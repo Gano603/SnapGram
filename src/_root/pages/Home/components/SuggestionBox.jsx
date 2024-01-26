@@ -12,11 +12,11 @@ const SuggestionBox = () => {
           <h3 className='text-[0.9rem] text-gray-400'>Suggested for you</h3>
           <Link to={"#"} className='text-sm font-semibold'>See All</Link>
         </div>
-        <UserCard id={"muhammad.khawar.577"} name={"Muhammad Khawar"} imgUrl={"/assets/images/profile.png"} user={false}/>
-        <UserCard id={"muhammad.khawar.577"} name={"Muhammad Khawar"} imgUrl={"/assets/images/profile.png"} user={false}/>
-        <UserCard id={"muhammad.khawar.577"} name={"Muhammad Khawar"} imgUrl={"/assets/images/profile.png"} user={false}/>
-        <UserCard id={"muhammad.khawar.577"} name={"Muhammad Khawar"} imgUrl={"/assets/images/profile.png"} user={false}/>
-        <UserCard id={"muhammad.khawar.577"} name={"Muhammad Khawar"} imgUrl={"/assets/images/profile.png"} user={false}/>
+        <UserCard id1={"muhammad.khawar.577"} name={"Muhammad Khawar"} imgUrl={"/assets/images/profile.png"} user={false}/>
+        <UserCard id1={"muhammad.khawar.577"} name={"Muhammad Khawar"} imgUrl={"/assets/images/profile.png"} user={false}/>
+        <UserCard id1={"muhammad.khawar.577"} name={"Muhammad Khawar"} imgUrl={"/assets/images/profile.png"} user={false}/>
+        <UserCard id1={"muhammad.khawar.577"} name={"Muhammad Khawar"} imgUrl={"/assets/images/profile.png"} user={false}/>
+        <UserCard id1={"muhammad.khawar.577"} name={"Muhammad Khawar"} imgUrl={"/assets/images/profile.png"} user={false}/>
         <SuggestionFooter />
       </div>
     </div>

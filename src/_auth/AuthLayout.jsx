@@ -1,16 +1,16 @@
 import React,{ useEffect } from "react";
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Outlet, useNavigate } from "react-router-dom"
+import { fetchData } from "../handlers/handlers";
 
 const AuthLayout = () => {
 
   const { isLoggedIn } = useSelector(state => state.states);
+  const disp = useDispatch();
   const nav = useNavigate();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      nav('/');
-    }
+        isLoggedIn? nav('/'):fetchData(disp,nav);
   }, [])
 
 

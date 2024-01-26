@@ -1,11 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    isLoggedIn:true,
+    isLoggedIn:false,
     isSearchOpen:false,
     isNotificationOpen:false,
-    isNavbarMinimize:true,
-    isInitialChatbox:true
+    isNavbarMinimize:false,
+    isInitialChatbox:true,
+    isCreatePost:false,
+    multiplePagePopup:false,
+    createPostExtend:false,
+    caption:"",
+    activeImage:0
 }
 
 const stateSlice = createSlice({
@@ -26,10 +31,25 @@ const stateSlice = createSlice({
         },
         setIsInitialChatbox:(state,action) =>{
             state.isInitialChatbox = action.payload;
+        },
+        setCreatePost:(state,action) =>{
+            state.isCreatePost = action.payload;
+        },
+        setMultiplePagePopup:(state,action) =>{
+            state.multiplePagePopup = action.payload;
+        },
+        setCreatePostExtend:(state,action) =>{
+            state.createPostExtend = action.payload;
+        },
+        setCaption:(state,action) =>{
+            state.caption = action.payload;
+        },
+        setActiveImage:(state,action) =>{
+            state.activeImage = action.payload;
         }
     }
 })
 
-export const {setIsLoggedIn,setIsSearchOpen,setIsNotificationOpen,setIsNavbarMinimized,setIsInitialChatbox} = stateSlice.actions;
+export const {setIsLoggedIn,setIsSearchOpen,setIsNotificationOpen,setIsNavbarMinimized,setIsInitialChatbox,setCreatePost,setMultiplePagePopup,setCreatePostExtend,setCaption,setActiveImage} = stateSlice.actions;
 
 export default stateSlice.reducer

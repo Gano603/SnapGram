@@ -9,6 +9,9 @@ export default {
       colors:{
         "grey": "#363838",
         "secondary": "#7d75ed",
+        "dark-grey":"#1f2020",
+        "darkest-grey":"#0c0c0c",
+        "skyblue":"#3776ff"
       },
       fontFamily:{
         "pacifico":"Pacifico"
