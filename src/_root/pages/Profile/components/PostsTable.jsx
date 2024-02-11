@@ -5,7 +5,7 @@ import PostCard from './PostCard';
 
 
 
-const PostsTable = () => {
+const PostsTable = ({posts}) => {
 
     const [selected,setselected] = useState(0);
 
@@ -20,12 +20,11 @@ const PostsTable = () => {
                 <button onClick={()=> setselected(2)} className={`flex items-center py-4 px-3 mx-4 ${selected === 2? "border-t-[1px]":"border-0"} text-sm`}><FaUserTag className='text-xl mx-2'/> TAGGED</button>
             </div>
             <div className='grid grid-cols-12 w-max space-x-1 space-y-1'>
-                <PostCard imgSrc={"/assets/images/pexels-anjana-c-674010.jpg"}/>
-                <PostCard imgSrc={"/assets/images/pexels-anjana-c-674010.jpg"}/>
-                <PostCard imgSrc={"/assets/images/pexels-anjana-c-674010.jpg"}/>
-                <PostCard imgSrc={"/assets/images/pexels-pixabay-206359.jpg"}/>
-                <PostCard imgSrc={"/assets/images/pexels-pixabay-206359.jpg"}/>
-                <PostCard imgSrc={"/assets/images/pexels-pixabay-206359.jpg"}/>
+                {posts.map((index,iter)=>{
+                    return (
+                        <PostCard key={iter} index={index}/>
+                    )
+                })}
             </div>
         </div>
     )

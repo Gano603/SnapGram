@@ -4,10 +4,10 @@ const initialState = {
     name:"",
     email:"",
     id:"",
-    createdAt:"",
     profilePic:"",
-    posts:[]
-}
+    followers:[],
+    following:[],
+    savedPosts:""}
 
 
 export const userSlice = createSlice({

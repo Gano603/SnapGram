@@ -12,9 +12,9 @@
     }
 
     #root {
-        width: 100vw;
-        height: 100vh;
-        overflow-x: hidden;
+        /* width: 100vw;
+        height: 100vh; */
+        /* overflow-x: hidden; */
     }
 }
 
@@ -23,7 +23,7 @@
 }
 
 /* test{
-    color: #0c0c0c;
+    color: #3b3b3b;
     background-color: white;
  grid-template-rows: repeat(12,1fr);
  grid-auto-flow: row-reverse;

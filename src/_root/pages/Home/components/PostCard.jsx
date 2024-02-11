@@ -3,14 +3,20 @@ import { BsThreeDots } from "react-icons/bs";
 import { CiHeart } from "react-icons/ci";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { FiSend } from "react-icons/fi";
+import { IoCopyOutline } from "react-icons/io5";
 import axios from 'axios';
 
 
 
-const PostCard = ({ verified, userId, caption, img, likes, timePosted }) => {
+const PostCard = ({ verified, userId, caption, img, likes, timePosted, postId, likedp, savedp }) => {
 
     const [user, setuser] = useState({});
     const [time, setTime] = useState('');
+    const [liked, setliked] = useState(likedp)
+    const [postLikes, setpostLikes] = useState(likes);
+    const [saved, setsaved] = useState(savedp);
+    const [comment, setcomment] = useState("");
+    const controller = new AbortController();
 
     const fetchUser = async () => {
         const userData = await axios.get(import.meta.env.VITE_API_URL + `user/getuser/${userId}`);
@@ -23,13 +29,49 @@ const PostCard = ({ verified, userId, caption, img, likes, timePosted }) => {
         const timeInHours = Math.floor(diff / (1000 * 60 * 60));
         const timeInDays = Math.floor(timeInHours / 24);
 
-        const displayTime =timeInDays > 0? `${timeInDays} ${timeInDays > 2 ? '' : 'd'}`: `${timeInHours} ${timeInHours > 24 ? '' : 'h'}`;
+        const displayTime = timeInDays > 0 ? `${timeInDays}d` : `${timeInHours} ${timeInHours > 24 ? '' : 'h'}`;
 
         setTime(displayTime)
 
 
         fetchUser();
-    },[timePosted])
+    }, [timePosted])
+
+    const likeUpdate = async (sup) => {
+        setpostLikes(prev => prev + sup)
+        sup == 1 ? setliked(true) : setliked(false);
+        update(postLikes + sup, sup == 1 ? true : false);
+    }
+
+    const update = async (likes, likedSend) => {
+        const data = await axios.get(import.meta.env.VITE_API_URL + `files/likeupdate/${postId}/${likes}/${likedSend}`, {
+            withCredentials: true,
+            signal: controller.signal
+        })
+        console.log(data)
+    }
+
+    const saveReq = async (state) => {
+        const res = await axios.get(import.meta.env.VITE_API_URL + `files/saveupdate/${postId}/${state}`, {
+            withCredentials: true,
+        });
+        console.log(res)
+    }
+
+    const saveHandler = (state) => {
+        setsaved(state)
+        saveReq(state)
+    }
+
+    const commentHandler = async() => {
+        const res = await axios.post(import.meta.env.VITE_API_URL + `files/createcomment`,{
+            _id:postId,
+            comment
+        }, {
+            withCredentials: true,
+        });
+        console.log(res)
+    }
 
     return (
         <div className='w-[28rem] border-b-[1px] h-max pb-5 border-gray-800 my-12'>
@@ -46,22 +88,28 @@ const PostCard = ({ verified, userId, caption, img, likes, timePosted }) => {
                 </div>
                 <BsThreeDots className='text-xl cursor-pointer' />
             </div>
-            <div className='h-[35rem] border-[1px] border-gray-800 rounded-md my-2 flex justify-center items-center'>
+            <div className='h-[35rem] border-[1px] border-gray-800 rounded-md my-2 flex justify-center items-center relative'>
+                <IoCopyOutline className={`absolute top-4 right-4 text-xl rotate-90 ${img.length > 1 ? "" : "hidden"}`} />
                 <img src={import.meta.env.VITE_API_URL + img[0].path} className='h-auto aspect-square' alt={img[0].originalname} />
             </div>
             <div>
                 <div className='flex justify-between'>
                     <div className='flex my-1'>
-                        <CiHeart className='text-3xl -translate-y-[0.15rem] cursor-pointer' />
+                        {!liked && <CiHeart onClick={() => likeUpdate(1)} className='text-3xl -translate-y-[0.15rem] cursor-pointer' />}
+                        {liked && <img onClick={() => likeUpdate(-1)} className='w-7 -translate-y-[0.15rem] cursor-pointer mx-[0.05rem] my-[0.05rem]' src={'/assets/icons/liked.svg'} />}
                         <IoChatbubbleOutline className='mx-3 text-2xl cursor-pointer' />
                         <FiSend className='text-2xl cursor-pointer' />
                     </div>
-                    <img src="/assets/images/icons8-save.svg" className='text-2xl text-white cursor-pointer h-7' alt="" />
+                    {!saved && <img onClick={() => saveHandler(true)} src="/assets/images/icons8-save.svg" className='cursor-pointer h-7' alt="save icon" />}
+                    {saved && <img onClick={() => saveHandler(false)} src="/assets/images/save-on.svg" className='cursor-pointer h-7' alt="saved icon" />}
                 </div>
-                <span className='text-sm font-semibold'>{likes} likes</span>
+                <span className='text-sm font-semibold'>{postLikes} {postLikes === 1 ? "like" : "likes"}</span>
                 <p className='my-1 text-sm line-clamp-2'><span className='font-semibold mr-2'>{user.id}</span>{caption}</p>
                 <p className='text-gray-400 text-[0.84rem] my-1'>View All {"102"} comments</p>
-                <input type="text" placeholder='Add a comment...' className=' bg-transparent w-full outline-none text-[0.84rem]' />
+                <div className='flex justify-between focus-within:border-b-[1px] border-b-gray-500'>
+                    <input type="text" onChange={(e)=> setcomment(e.target.value)} placeholder='Add a comment...' className=' bg-transparent w-full outline-none text-[0.84rem]' />
+                    <FiSend onClick={commentHandler} className={`text-xl rotate-45 text-gray-600 ${comment? "block":"hidden"} cursor-pointer mx-2 my-1`} />
+                </div>
             </div>
         </div>
     )

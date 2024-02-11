@@ -11,17 +11,20 @@ import { BsThreads } from "react-icons/bs";
 import { FiExternalLink } from "react-icons/fi";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useDispatch, useSelector } from 'react-redux';
-import { setCreatePost, setIsNavbarMinimized, setIsNotificationOpen, setIsSearchOpen } from '../../../features/StateSlice';
+import { setCreatePost, setIsNavbarMinimized, setIsNotificationOpen, setIsSearchOpen, setIsSettingMenuOpen } from '../../../features/StateSlice';
 import { FaReact } from "react-icons/fa6";
 import { navAnim } from '../animation';
 import { motion } from 'framer-motion';
+import SettingsMenu from './SettingsMenu';
 
 
 const Navbar = () => {
 
   const nav = useNavigate();
 
-  const { isSearchOpen, isNotificationOpen, isNavbarMinimize } = useSelector(state => state.states);
+  const { isSearchOpen, isNotificationOpen, isNavbarMinimize, isSettingMenuOpen } = useSelector(state => state.states);
+  const { profilePic } = useSelector(state => state.userData);
+
   const disp = useDispatch();
 
   const current = useLocation();
@@ -30,6 +33,7 @@ const Navbar = () => {
     if (isSearchOpen) disp(setIsSearchOpen(false))
     if (isNotificationOpen) disp(setIsNotificationOpen(false))
     if (isNavbarMinimize) disp(setIsNavbarMinimized(false))
+    if (isSettingMenuOpen) disp(setIsSettingMenuOpen(false))
     if (dest === "/inbox") disp(setIsNavbarMinimized(true))
     nav(dest)
   }
@@ -37,14 +41,14 @@ const Navbar = () => {
   const stateChange = (search, notification, navbarMinimized) => {
     disp(setIsSearchOpen(search));
     disp(setIsNotificationOpen(notification));
-    if(current.pathname !== "/inbox") {disp(setIsNavbarMinimized(navbarMinimized))}
+    if (current.pathname !== "/inbox") { disp(setIsNavbarMinimized(navbarMinimized)) }
   }
 
   return (
     <motion.nav
       variants={navAnim}
       initial={"initial"}
-      animate={isNavbarMinimize? "close":"open"}
+      animate={isNavbarMinimize ? "close" : "open"}
       className={`border-r-[1px] h-[100vh] border-r-grey px-4 flex flex-col justify-between overflow-x-hidden box-border z-20 bg-black`}>
       <div className='w-full cursor-pointer'>
         {!isNavbarMinimize && <h1 onClick={() => navig("/")} className='font-pacifico text-3xl my-8 mx-2 cursor-pointer'>Reactgram</h1>}
@@ -61,7 +65,7 @@ const Navbar = () => {
           <MdOutlineExplore className='text-3xl -translate-x-1' />
           <span className='mx-4'>Explore</span>
         </div>
-        <div className={`flex items-center w-[300px] my-3 ${current.pathname === "/reels" ? "font-extrabold" : ""} cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-10 p-2 rounded-xl`} onClick={() => navig('#')}>
+        <div className={`flex items-center w-[300px] my-3 ${current.pathname === "/reels" ? "font-extrabold" : ""} cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-10 p-2 rounded-xl`} onClick={() => navig('/watch')}>
           <MdOndemandVideo className='text-3xl -translate-x-1' />
           <span className='mx-4'>Reels</span>
         </div>
@@ -78,17 +82,18 @@ const Navbar = () => {
           <span className='mx-4'>Create</span>
         </div>
         <div className={`flex items-center w-[300px] my-3 ${current.pathname === "/profile" ? "font-extrabold" : ""} cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-10 p-2 rounded-xl`} onClick={() => navig('/profile')}>
-          <img src="/assets/icons/profile-placeholder.svg" className='w-7 h-7 rounded-full' alt="user" />
+          <img src={import.meta.env.VITE_API_URL + profilePic} className='w-7 h-7 rounded-full' alt="user" />
           <span className='mx-5'>Profile</span>
         </div>
       </div>
       <div>
-        <div className='flex my-3 w-[300px] cursor-pointer items-center transition-all duration-300 hover:bg-white hover:bg-opacity-10 p-2 rounded-xl group' onClick={() => navig('#')}>
+        <div className='flex my-3 w-[300px] cursor-pointer items-center transition-all duration-300 hover:bg-white hover:bg-opacity-10 p-2 rounded-xl group relative' onClick={() => navig('#')}>
           <BsThreads className='text-3xl mr-2' />
           <span className='mx-4 w-full'>Threads</span>
           <FiExternalLink className='text-2xl group-hover:block hidden text-white text-opacity-50' />
+          <SettingsMenu />
         </div>
-        <div className='flex items-center w-[300px] my-3 cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-10 p-2 rounded-xl' onClick={() => navig('#')}>
+        <div onClick={() => disp(setIsSettingMenuOpen(!isSettingMenuOpen))} className='flex items-center w-[300px] my-3 cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-10 p-2 rounded-xl'>
           <RxHamburgerMenu className='text-3xl' />
           <span className='mx-4'>Settings</span>
         </div>

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Chat, CreateComponent, Explore, Home, NotFound, Profile, RootLayout } from './_root'
+import { Chat, CreateComponent, Explore, Home, NotFound, PostPage, Profile, Reels, RootLayout } from './_root/index'
 import { AuthLayout, SignIn, SignUp } from './_auth'
 import './globals.css'
 import Test from './_root/pages/test/Test'
@@ -10,6 +10,7 @@ function App() {
   return (
     <main>
       <CreateComponent />
+      <PostPage />
       <Routes>
         <Route element={<AuthLayout />} >
           <Route path='/sign-in' element={<SignIn />} />
@@ -19,6 +20,7 @@ function App() {
         <Route element={<RootLayout />} >
           <Route index element={<Home />} />
           <Route path='/profile' element={<Profile />} />
+          <Route path='/watch' element={<Reels />} />
           <Route path='/explore' element={<Explore />} />
           <Route path='/inbox' element={<Chat />} />
           <Route path='/test' element={<Test />} />

@@ -5,12 +5,14 @@ const initialState = {
     isSearchOpen:false,
     isNotificationOpen:false,
     isNavbarMinimize:false,
-    isInitialChatbox:true,
+    isInitialChatbox:false,
     isCreatePost:false,
     multiplePagePopup:false,
     createPostExtend:false,
     caption:"",
-    activeImage:0
+    activeImage:0,
+    isViewPost:false,
+    isSettingMenuOpen:false,
 }
 
 const stateSlice = createSlice({
@@ -46,10 +48,16 @@ const stateSlice = createSlice({
         },
         setActiveImage:(state,action) =>{
             state.activeImage = action.payload;
+        },
+        setIsViewPost:(state,action) =>{
+            state.isViewPost = action.payload;
+        },
+        setIsSettingMenuOpen:(state,action) =>{
+            state.isSettingMenuOpen = action.payload;
         }
     }
 })
 
-export const {setIsLoggedIn,setIsSearchOpen,setIsNotificationOpen,setIsNavbarMinimized,setIsInitialChatbox,setCreatePost,setMultiplePagePopup,setCreatePostExtend,setCaption,setActiveImage} = stateSlice.actions;
+export const {setIsLoggedIn,setIsSearchOpen,setIsNotificationOpen,setIsNavbarMinimized,setIsInitialChatbox,setCreatePost,setMultiplePagePopup,setCreatePostExtend,setCaption,setActiveImage,setIsViewPost,setIsSettingMenuOpen} = stateSlice.actions;
 
 export default stateSlice.reducer

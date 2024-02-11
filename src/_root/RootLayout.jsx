@@ -8,6 +8,7 @@ import LeftPanel from "./pages/Chat/components/LeftPanel";
 const RootLayout = () => {
 
   const { isLoggedIn } = useSelector(state => state.states);
+  const { id } = useSelector(state => state.userData);
   const nav = useNavigate();
   const location = useLocation();
   const disp = useDispatch();
@@ -29,7 +30,7 @@ const RootLayout = () => {
       <Navbar />
       <Search key={1} />
       <NotifiactionBar key={2} />
-      <LeftPanel id={"fluffyguy123"} />
+      <LeftPanel id={id} />
       <section onClick={() => location.pathname !== '/inbox' ? stateChange(false, false, false) : ""} className="overflow-y-auto scroll-none h-[100vh] w-full">
         <Outlet />
         <MainFooter />

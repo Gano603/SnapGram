@@ -8,7 +8,7 @@ const UserCard = ({user,id1,search,imgUrl}) => {
   const [userImage, setuserImage] = useState("");
 
   useEffect(() =>{
-      if(user) setuserImage(import.meta.env.VITE_API_URL+'Images/profile-placeholder.svg');
+      if(user) setuserImage(import.meta.env.VITE_API_URL+profilePic);
       else setuserImage(imgUrl)
   })
 

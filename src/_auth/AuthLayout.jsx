@@ -17,8 +17,8 @@ const AuthLayout = () => {
   return (
     <div className="w-full h-screen flex justify-between">
       <Outlet />
-      <div className="w-[80vw] h-full">
-        <img className="h-full" src="/assets/images/side-img.svg" alt="Side Hero Image" />
+      <div className="hidden lg:block w-[100rem] 2xl:w-[90rem] h-full">
+        <img className="h-full object-cover" src="/assets/images/side-img.svg" alt="Side Hero Image" />
       </div>
 
     </div>
