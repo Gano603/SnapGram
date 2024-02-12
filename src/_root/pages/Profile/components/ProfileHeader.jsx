@@ -2,9 +2,9 @@ import React from 'react'
 import { BsGearWide } from "react-icons/bs";
 import { useSelector } from 'react-redux';
 
-const ProfileHeader = ({posts}) => {
+const ProfileHeader = ({user}) => {
 
-  const {id,name,profilePic,followers,following} = useSelector(state => state.userData);
+  const {id,name,profilePic,followers,following,posts} = useSelector(state => state.userData);
 
    return (
     <div className='my-5'>
@@ -19,8 +19,8 @@ const ProfileHeader = ({posts}) => {
           </div>
           <div className='flex'>
             <div className='mr-5'>
-              <span className='mr-[0.2rem] font-semibold'>{posts?.length}</span>
-              <span className='mx-[0.1rem] text-[0.95rem]'>{posts?.length ===1? "post":"posts"}</span>
+              <span className='mr-[0.2rem] font-semibold'>{posts}</span>
+              <span className='mx-[0.1rem] text-[0.95rem]'>{posts ===1? "post":"posts"}</span>
             </div>
             <div className='mx-5'>
               <span className='mr-[0.2rem] font-semibold'>{followers?.length || 0}</span>

@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { setIsLoggedIn } from '../../features/StateSlice';
 import axios from 'axios';
 import { fetchData } from '../../handlers/handlers';
+import toast from 'react-hot-toast';
 
 const SignIn = () => {
 
@@ -27,18 +28,24 @@ const SignIn = () => {
     }
     if (password && email) {
       try {
-        const res = await axios.post(import.meta.env.VITE_API_URL + 'user/signin', { password, email },
+        await axios.post(import.meta.env.VITE_API_URL + 'user/signin', { password, email },
           { withCredentials: true })
-        if (res.status === 200) {
-          disp(setIsLoggedIn(true))
-          fetchData(disp,nav);
-          nav('/')
-        }
+          .then((res) => {
+            if (res.status === 200) {
+              toast.success('Logged In Successfully', {
+                duration: 3000,
+                position: 'top-right',
+              })
+              disp(setIsLoggedIn(true))
+              fetchData(disp, nav);
+              nav('/')
+            }
+          })
       } catch (error) {
-        if(error.response.status === 399){
+        if (error.response.status === 399) {
           setpasswordError(error.response.data.message)
         }
-        if(error.response.status === 400 || error.status === 398){
+        if (error.response.status === 400 || error.response.status === 398) {
           setemailError(error.response.data.message)
         }
       }

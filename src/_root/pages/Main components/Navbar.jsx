@@ -23,7 +23,7 @@ const Navbar = () => {
   const nav = useNavigate();
 
   const { isSearchOpen, isNotificationOpen, isNavbarMinimize, isSettingMenuOpen } = useSelector(state => state.states);
-  const { profilePic } = useSelector(state => state.userData);
+  const { profilePic , id} = useSelector(state => state.userData);
 
   const disp = useDispatch();
 
@@ -81,7 +81,7 @@ const Navbar = () => {
           <MdOutlineAddBox className='text-3xl -translate-x-1 text-secondary' />
           <span className='mx-4'>Create</span>
         </div>
-        <div className={`flex items-center w-[300px] my-3 ${current.pathname === "/profile" ? "font-extrabold" : ""} cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-10 p-2 rounded-xl`} onClick={() => navig('/profile')}>
+        <div className={`flex items-center w-[300px] my-3 ${current.pathname === "/profile" ? "font-extrabold" : ""} cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-10 p-2 rounded-xl`} onClick={() => navig('/profile/'+id)}>
           <img src={import.meta.env.VITE_API_URL + profilePic} className='w-7 h-7 rounded-full' alt="user" />
           <span className='mx-5'>Profile</span>
         </div>

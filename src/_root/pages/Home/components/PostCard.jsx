@@ -8,20 +8,14 @@ import axios from 'axios';
 
 
 
-const PostCard = ({ verified, userId, caption, img, likes, timePosted, postId, likedp, savedp }) => {
+const PostCard = ({ verified, userId, userImage, caption, img, likes, timePosted, postId, likedp, savedp }) => {
 
-    const [user, setuser] = useState({});
     const [time, setTime] = useState('');
     const [liked, setliked] = useState(likedp)
     const [postLikes, setpostLikes] = useState(likes);
     const [saved, setsaved] = useState(savedp);
     const [comment, setcomment] = useState("");
     const controller = new AbortController();
-
-    const fetchUser = async () => {
-        const userData = await axios.get(import.meta.env.VITE_API_URL + `user/getuser/${userId}`);
-        setuser(userData.data.details);
-    }
 
     useEffect(() => {
         const diff = Date.now() - timePosted;
@@ -32,9 +26,6 @@ const PostCard = ({ verified, userId, caption, img, likes, timePosted, postId, l
         const displayTime = timeInDays > 0 ? `${timeInDays}d` : `${timeInHours} ${timeInHours > 24 ? '' : 'h'}`;
 
         setTime(displayTime)
-
-
-        fetchUser();
     }, [timePosted])
 
     const likeUpdate = async (sup) => {
@@ -70,16 +61,15 @@ const PostCard = ({ verified, userId, caption, img, likes, timePosted, postId, l
         }, {
             withCredentials: true,
         });
-        console.log(res)
     }
 
     return (
         <div className='w-[28rem] border-b-[1px] h-max pb-5 border-gray-800 my-12'>
             <div className='flex justify-between items-center'>
-                <img className='w-9 h-9 rounded-full' src="/assets/images/profile.png" alt="user-profile" />
+                <img className='w-9 h-9 rounded-full' src={import.meta.env.VITE_API_URL+userImage} alt={userId+' profile-pic'} />
                 <div className='w-full mx-2'>
                     <div className='flex items-center h-4'>
-                        <h4 className='text-sm font-semibold'>{user.id}</h4>
+                        <h4 className='text-sm font-semibold'>{userId}</h4>
                         {verified && <img className='w-4 h-4 ml-1' src="/assets/images/verified.png" alt="verified" />}
                         <span className='text-gray-400 -translate-y-[0.25rem] text-lg mx-1'>.</span>
                         <span className='text-gray-400 text-sm'>{time}</span>
@@ -104,7 +94,7 @@ const PostCard = ({ verified, userId, caption, img, likes, timePosted, postId, l
                     {saved && <img onClick={() => saveHandler(false)} src="/assets/images/save-on.svg" className='cursor-pointer h-7' alt="saved icon" />}
                 </div>
                 <span className='text-sm font-semibold'>{postLikes} {postLikes === 1 ? "like" : "likes"}</span>
-                <p className='my-1 text-sm line-clamp-2'><span className='font-semibold mr-2'>{user.id}</span>{caption}</p>
+                <p className='my-1 text-sm line-clamp-2'><span className='font-semibold mr-2'>{userId}</span>{caption}</p>
                 <p className='text-gray-400 text-[0.84rem] my-1'>View All {"102"} comments</p>
                 <div className='flex justify-between focus-within:border-b-[1px] border-b-gray-500'>
                     <input type="text" onChange={(e)=> setcomment(e.target.value)} placeholder='Add a comment...' className=' bg-transparent w-full outline-none text-[0.84rem]' />

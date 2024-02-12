@@ -3,18 +3,18 @@ import { CiHeart } from "react-icons/ci";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { IoCopyOutline } from "react-icons/io5";
 import { useDispatch } from 'react-redux';
-import { setIsViewPost } from '../../../../features/StateSlice';
 import { setData } from '../../../../features/displayPost';
-
+import { useNavigate } from 'react-router-dom';
 
 
 const PostCard = ({ index }) => {
 
   const disp = useDispatch();
+  const nav = useNavigate();
 
   function postHandler() {
     disp(setData(index));
-    disp(setIsViewPost(true))
+    nav('/post/'+index._id)
   }
 
 

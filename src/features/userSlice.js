@@ -7,7 +7,9 @@ const initialState = {
     profilePic:"",
     followers:[],
     following:[],
-    savedPosts:""}
+    savedPosts:"",
+    posts:0
+}
 
 
 export const userSlice = createSlice({

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { setIsLoggedIn } from '../../features/StateSlice';
 import { fetchData } from '../../handlers/handlers';
+import toast from 'react-hot-toast';
 
 const SignUp = () => {
 
@@ -22,72 +23,80 @@ const SignUp = () => {
   const disp = useDispatch();
   const { isLoggedIn } = useSelector(state => state.states);
 
-  const submitHandler = async(e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    if(!password){
+    if (!password) {
       setpasswordError("field cannot be empty")
     }
-    if(!cpassword){
+    if (!cpassword) {
       setcpasswordError("field cannot be empty")
     }
-    if(!name){
+    if (!name) {
       setnameError("field cannot be empty")
     }
-    if(!username){
+    if (!username) {
       setIdError("field cannot be empty")
     }
-    if(!email){
+    if (!email) {
       setemailError("field cannot be empty")
     }
-    if(password !== cpassword){
+    if (password !== cpassword) {
       setpasswordError("passwords do not match")
       setcpasswordError("passwords do not match")
     }
-    if(password && cpassword && email && username && name){
+    if (password && cpassword && email && username && name) {
       setpasswordError("");
       setcpasswordError("")
-      const res = await axios.post(import.meta.env.VITE_API_URL+'user/signup',{password,email,id:username,name},
-      {withCredentials:true})
+      try {
+        const res = await axios.post(import.meta.env.VITE_API_URL + 'user/signup', { password, email, id: username, name },
+          { withCredentials: true })
 
-      if(res.status===200) {
-        disp(setIsLoggedIn(true))
-        fetchData(disp,nav);
-        nav('/')
+        if (res.status === 200) {
+          toast.success('Account Created Successfully',{
+            duration: 3000,
+            position: 'top-right',
+          })
+          disp(setIsLoggedIn(true))
+          fetchData(disp, nav);
+          nav('/')
+        }
+      } catch (error) {
+        console.log(error)
       }
+    }
   }
-}
 
-  useEffect(()=>{
+  useEffect(() => {
     const userName = document.getElementById('username');
     const userEmail = document.getElementById('email');
-    userName.addEventListener('focusout',()=>usernameChecker(userName.value))
-    userEmail.addEventListener('focusout',()=>emailChecker(userEmail.value))
+    userName.addEventListener('focusout', () => usernameChecker(userName.value))
+    userEmail.addEventListener('focusout', () => emailChecker(userEmail.value))
 
-    return ()=>{
-      userName.removeEventListener('focusout',()=>usernameChecker(userName.value))
-      userEmail.removeEventListener('focusout',()=>emailChecker(userName.value))
+    return () => {
+      userName.removeEventListener('focusout', () => usernameChecker(userName.value))
+      userEmail.removeEventListener('focusout', () => emailChecker(userName.value))
     }
   })
 
-  const emailChecker = async(value) =>{
+  const emailChecker = async (value) => {
     setemail(value)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if(!emailRegex.test(value)) setemailError("Email is not valid")
+    if (!emailRegex.test(value)) setemailError("Email is not valid")
     else {
       setemailError("")
-      const res = await axios.post(import.meta.env.VITE_API_URL+'user/checkEmail',{email:value});
-      if(res.status===201) setemailError(res.data.message)
-    
+      const res = await axios.post(import.meta.env.VITE_API_URL + 'user/checkEmail', { email: value });
+      if (res.status === 201) setemailError(res.data.message)
+
     }
   }
 
-  const usernameChecker = async (value)=>{
+  const usernameChecker = async (value) => {
     setusername(value)
-    if(value.length < 3) setIdError("username is too small")
+    if (value.length < 3) setIdError("username is too small")
     else {
       setIdError('')
-      const res = await axios.post(import.meta.env.VITE_API_URL+'user/checkId',{id:value});
-      if(res.status===201) setIdError(res.data.message)    
+      const res = await axios.post(import.meta.env.VITE_API_URL + 'user/checkId', { id: value });
+      if (res.status === 201) setIdError(res.data.message)
     }
   }
 

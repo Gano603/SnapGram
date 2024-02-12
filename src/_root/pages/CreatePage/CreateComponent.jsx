@@ -6,13 +6,13 @@ import EmptyArray from './components/EmptyArray';
 import ImageDisplay from './components/ImageDisplay';
 import PostBox from './components/PostBox';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 
 
 const CreateComponent = () => {
 
     const { isCreatePost, createPostExtend, caption } = useSelector(state => state.states);
-    const { _id } = useSelector(state => state.userData);
     const [pictures, setpictures] = useState([]);
     const [result, setresult] = useState([]);
     const disp = useDispatch();
@@ -28,29 +28,35 @@ const CreateComponent = () => {
     ]
 
     useEffect(() => {
-        let resultsArray = [];
-        if (pictures.length > 0) {
-            for (const file of pictures) {
-                const reader = new FileReader();
+        const loadPictures = async () => {
+            let promises = [];
 
-                reader.onload = () => {
-                    resultsArray.push(reader.result);
+            if (pictures.length > 0) {
+                for (const file of pictures) {
+                    const promise = new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result);
+                        reader.readAsDataURL(file);
+                    });
+
+                    promises.push(promise);
                 }
-                reader.readAsDataURL(file);
 
+                try {
+
+                    if (result.length === 0) {
+                        const resultsArray = await Promise.all(promises);
+                        setresult(resultsArray);
+                        setstate((prev) => prev + 1);
+                    }
+                } catch (error) {
+                    console.error('Error reading files:', error);
+                }
             }
-            setTimeout(() => {
-                setresult(resultsArray);
-                if (result.length === 0) {
-                    setstate((prev) => prev + 1);
-                }
-            }, 1000);
-        }
-        // console.log(resultsArray);
-        // console.log(pictures)
-        // console.log(inputRef)
+        };
 
-    }, [pictures])
+        loadPictures();
+    }, [pictures]);
 
     const upload = async () => {
         const dataTransfer = new DataTransfer();
@@ -60,10 +66,13 @@ const CreateComponent = () => {
 
         try {
             const res = await axios.postForm(import.meta.env.VITE_API_URL + `files/upload/${caption}`, {
-                'files[]':dataTransfer.files
-            },{withCredentials:true});
-            console.log(res)
+                'files[]': dataTransfer.files
+            }, { withCredentials: true });
             if (res.status === 200) {
+                toast.success('Post Shared Successfully',{
+                    position:'top-right',
+                    duration: 3000
+                })
                 setstate((prev) => prev + 1);
                 setTimeout(1000);
                 setstate(0);
@@ -90,10 +99,16 @@ const CreateComponent = () => {
         }
     }
 
+    const resetPage = () => {
+        setresult([]);
+        setpictures([]);
+        disp(setCreatePost(false))
+    }
+
     return (
         <>
             {isCreatePost &&
-                <div onClick={() => disp(setCreatePost(false))} className='w-full h-screen absolute top-0 left-0 bg-black z-30 bg-opacity-30 flex items-center justify-center'>
+                <div onClick={resetPage} className='w-full h-screen absolute top-0 left-0 bg-black z-30 bg-opacity-30 flex items-center justify-center'>
                     <div onClick={(e) => e.stopPropagation()} className={`bg-dark-grey transition-all duration-300 ${createPostExtend ? "w-[53%]" : "w-[36%]"} h-[80%] rounded-xl overflow-hidden`}>
                         <div className='flex justify-between items-center px-4 border-b-[1px] border-white border-opacity-15 h-[6%]'>
                             {headings[state].back && <FaArrowLeft onClick={() => handler(-1)} className='text-2xl cursor-pointer' />}

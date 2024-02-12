@@ -5,12 +5,13 @@ import { AuthLayout, SignIn, SignUp } from './_auth'
 import './globals.css'
 import Test from './_root/pages/test/Test'
 import Test1 from './_root/pages/test/Test1'
+import { Toaster } from 'react-hot-toast'
 function App() {
 
   return (
     <main>
+      <Toaster />
       <CreateComponent />
-      <PostPage />
       <Routes>
         <Route element={<AuthLayout />} >
           <Route path='/sign-in' element={<SignIn />} />
@@ -19,7 +20,8 @@ function App() {
 
         <Route element={<RootLayout />} >
           <Route index element={<Home />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route path='/profile/:id' element={<Profile />} />
+          <Route path='/post/:id' element={<PostPage />} />
           <Route path='/watch' element={<Reels />} />
           <Route path='/explore' element={<Explore />} />
           <Route path='/inbox' element={<Chat />} />

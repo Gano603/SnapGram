@@ -11,7 +11,7 @@ const Mainbar = () => {
   const {id} = useSelector(state => state.userData);
 
   const contentFetch = async() =>{
-    const dat = await axios.get(import.meta.env.VITE_API_URL+'files/getallposts')
+    const dat = await axios.get(import.meta.env.VITE_API_URL+'files/getallposts');
     setdata(dat.data.details)
   }
 
@@ -26,8 +26,8 @@ const Mainbar = () => {
   return (
     <div className='w-[65%] flex flex-col items-center py-8'>
       <StoryBar />
-      {data.map((index,iter)=>{
-        return <PostCard key={iter} userId={index.userId} savedp={index.savedBy.includes(id)} likedp={index.likedBy.includes(id)} postId={index._id} caption={index.caption} img={index.imgPath} likes={index.likes} timePosted={index.timePosted}/>
+      {data?.map((index,iter)=>{
+        return <PostCard key={iter} userId={index.user.id} userImage={index.user.profilePic} savedp={index.savedBy.includes(id)} likedp={index.likedBy.includes(id)} postId={index._id} caption={index.caption} img={index.imgPath} likes={index.likes} timePosted={index.timePosted} verified={index.verified}/>
       })}
     </div>
   )

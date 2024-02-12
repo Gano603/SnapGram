@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit"
 
 
 const initialState = {
-
+    post:[],
+    user:{}
 }
 
 export const displayPostSlice = createSlice({
