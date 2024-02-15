@@ -10,6 +10,7 @@ import { FiSend } from "react-icons/fi";
 import axios from 'axios';
 import CommentBox from './components/CommentBox';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 
 
@@ -18,11 +19,13 @@ const PostPage = () => {
     try {
 
         const { profilePic, id, verified } = useSelector(state => state.displayUser);
-        const { imgPath, likes, caption, timePosted, comments } = useSelector(state => state.displayPost)
+        const { _id, imgPath, likes, caption, timePosted } = useSelector(state => state.displayPost)
 
         const [liked, setliked] = useState(false)
         const [saved, setsaved] = useState(false);
         const [time, setTime] = useState('');
+        const [comments, setcomments] = useState([]);
+        const [comment, setcomment] = useState('');
         const [activeImage, setactiveImage] = useState(0);
         const [postLikes, setpostLikes] = useState(likes);
         const controller = new AbortController();
@@ -36,6 +39,7 @@ const PostPage = () => {
             const displayTime = timeInDays > 0 ? `${timeInDays} ${timeInDays > 2 ? 'days' : 'day'}` : `${timeInHours} ${timeInHours > 24 ? '' : 'h'}`;
 
             setTime(displayTime)
+            getComments();
         }, [timePosted])
 
 
@@ -52,9 +56,40 @@ const PostPage = () => {
             })
         }
 
+        const getComments = async () => {
+            await axios.get(import.meta.env.VITE_API_URL + 'files//getcomments/' + _id)
+                .then(res => {
+                    if (res.status === 200) {
+                        setcomments(res.data.details)
+                    }
+                })
+        }
+
+        const commentHandler = async () => {
+            if (comment.length > 0) {
+                await axios.post(import.meta.env.VITE_API_URL + `files/createcomment`, {
+                    _id,
+                    comment
+                }, {
+                    withCredentials: true,
+                })
+                    .then((res) => {
+                        if (res.status === 200) {
+                            setcomment("");
+                            toast.success("Comment Added successfully");
+                            getComments();
+                        }
+                    })
+            }
+            else{
+                toast.error("Comments Cannot be Empty",
+                {duration:1000})
+            }
+        }
+
         return (
             <div onClick={() => window.history.back()} className='w-full h-screen absolute top-0 left-0 bg-black z-30 bg-opacity-30 flex items-center justify-center backdrop-blur-lg'>
-                <RxCross2 onClick={() => window.history.back()} className='absolute top-4 right-4 text-2xl text-white stroke-2 cursor-pointer' />
+                <RxCross2 className='absolute top-4 right-4 text-2xl text-white stroke-2 cursor-pointer' />
                 <div onClick={(e) => e.stopPropagation()} className='bg-black transition-all duration-300 w-[65%] h-[90%] rounded-xl overflow-hidden flex'>
                     <div className='w-3/5 flex items-center h-full relative'>
                         <img className='aspect-square' src={import.meta.env.VITE_API_URL + imgPath[activeImage]?.path} alt={imgPath[activeImage]?.originalname} />
@@ -85,15 +120,17 @@ const PostPage = () => {
                                     <div className='flex items-center h-4'>
                                         <h4 className='text-sm font-bold'>{id}</h4>
                                         {verified && <img className='w-4 h-4 ml-1' src="/assets/images/verified.png" alt="verified" />}
-                                        <p className='mx-3'>{caption}</p>
+                                        <p className='mx-3 text-sm'>{caption}</p>
                                     </div>
                                 </div>
                             </div>
-                            {comments.map((index, iter) => {
-                                return (
-                                    <CommentBox key={iter} index={index} />
-                                )
-                            })}
+                            <div className='my-8'>
+                                {comments.map((index, iter) => {
+                                    return (
+                                        <CommentBox key={iter} index={index} />
+                                    )
+                                })}
+                            </div>
                         </div>
                         <div className='flex justify-between h-[2rem] mx-2 my-3'>
                             <div className='flex my-1'>
@@ -109,18 +146,18 @@ const PostPage = () => {
                         <p className='text-gray-400 text-sm mx-3 mb-2 mt-1'>{time}</p>
                         <div className='h-[3rem] flex items-center'>
                             <MdEmojiEmotions className='text-2xl m-2' />
-                            <input className='w-full outline-none h-full bg-transparent mx-2 text-sm' placeholder='Add comment...' type="text" />
-                            <button className='text-[0.95rem] text-gray-400'>Post</button>
+                            <input onChange={(e) => setcomment(e.target.value)} value={comment} className='w-full outline-none h-full bg-transparent mx-2 text-sm' placeholder='Add comment...' type="text" />
+                            <button onClick={commentHandler} className={`text-[0.95rem] cursor-pointer ${comment.length === 0 ? "text-gray-400" : "text-blue-600"}`}>Post</button>
                         </div>
                     </div>
                 </div>
             </div>
         )
     } catch (error) {
-       useEffect(() => {
-        nav('/')
-       }, [])
-       
+        useEffect(() => {
+            nav('/')
+        }, [])
+
     }
 }
 

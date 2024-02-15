@@ -5,6 +5,7 @@ import { IoChatbubbleOutline } from "react-icons/io5";
 import { FiSend } from "react-icons/fi";
 import { IoCopyOutline } from "react-icons/io5";
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 
 
@@ -54,19 +55,31 @@ const PostCard = ({ verified, userId, userImage, caption, img, likes, timePosted
         saveReq(state)
     }
 
-    const commentHandler = async() => {
-        const res = await axios.post(import.meta.env.VITE_API_URL + `files/createcomment`,{
-            _id:postId,
-            comment
-        }, {
-            withCredentials: true,
-        });
+    const commentHandler = async () => {
+        if (comment.length > 0) {
+            await axios.post(import.meta.env.VITE_API_URL + `files/createcomment`, {
+                _id: postId,
+                comment
+            }, {
+                withCredentials: true,
+            })
+                .then((res) => {
+                    if (res.status === 200) {
+                        setcomment("");
+                        toast.success("Comment Added successfully")
+                    }
+                })
+        }
+        else {
+            toast.error("Comments Cannot be Empty",
+                { duration: 1000 })
+        }
     }
 
     return (
         <div className='w-[28rem] border-b-[1px] h-max pb-5 border-gray-800 my-12'>
             <div className='flex justify-between items-center'>
-                <img className='w-9 h-9 rounded-full' src={import.meta.env.VITE_API_URL+userImage} alt={userId+' profile-pic'} />
+                <img className='w-9 h-9 rounded-full' src={import.meta.env.VITE_API_URL + userImage} alt={userId + ' profile-pic'} />
                 <div className='w-full mx-2'>
                     <div className='flex items-center h-4'>
                         <h4 className='text-sm font-semibold'>{userId}</h4>
@@ -97,8 +110,8 @@ const PostCard = ({ verified, userId, userImage, caption, img, likes, timePosted
                 <p className='my-1 text-sm line-clamp-2'><span className='font-semibold mr-2'>{userId}</span>{caption}</p>
                 <p className='text-gray-400 text-[0.84rem] my-1'>View All {"102"} comments</p>
                 <div className='flex justify-between focus-within:border-b-[1px] border-b-gray-500'>
-                    <input type="text" onChange={(e)=> setcomment(e.target.value)} placeholder='Add a comment...' className=' bg-transparent w-full outline-none text-[0.84rem]' />
-                    <FiSend onClick={commentHandler} className={`text-xl rotate-45 text-gray-600 ${comment? "block":"hidden"} cursor-pointer mx-2 my-1`} />
+                    <input type="text" onChange={(e) => setcomment(e.target.value)} value={comment} placeholder='Add a comment...' className=' bg-transparent w-full outline-none text-[0.84rem]' />
+                    <FiSend onClick={commentHandler} className={`text-xl rotate-45 text-gray-600 ${comment ? "block" : "hidden"} cursor-pointer mx-2 my-1`} />
                 </div>
             </div>
         </div>
